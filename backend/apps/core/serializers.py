@@ -11,7 +11,7 @@ class BatchSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'multiple_subjects', 'subject', 'fees', 'code', 'is_archived', 'coaching_center', 'total_students', 'student_count']
         
     def get_student_count(self, obj):
-        return obj.students.count()
+        return obj.students_list.count()
 
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:
