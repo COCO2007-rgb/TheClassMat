@@ -77,10 +77,9 @@ def public_register_student(request):
     with transaction.atomic():
         student = Student.objects.create(
             student_id=student_id_code,
-            name=data.get("name"),
+            first_name=data.get("name"),
             surname=data.get("surname", ""),
             father_name=data.get("father_name", ""),
-            mobile=mob,
             student_contact=data.get("student_contact") or mob,
             parent_contact=data.get("parent_contact") or data.get("parent_mobile", ""),
             email=email,
@@ -88,9 +87,9 @@ def public_register_student(request):
             dob=data.get("dob", ""),
             gender=data.get("gender", ""),
             joining_date=data.get("joining_date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            batch=batch,
             coaching_center=batch.coaching_center
         )
-        student.batches.add(batch)
         
         parent_email = email if email else f"{student_id_code.lower()}@apextuition.com"
         password = mob if mob else "parent123"

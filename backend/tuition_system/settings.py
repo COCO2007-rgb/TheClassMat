@@ -69,10 +69,10 @@ DATABASES = {
     }
 }
 
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST", "ep-super-cell-at0xr2i6-pooler.c-9.us-east-1.aws.neon.tech")
+DB_NAME = os.getenv("DB_NAME", "neondb")
+DB_USER = os.getenv("DB_USER", "neondb_owner")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "npg_3SyW6GCKHsYQ")
 DB_PORT = os.getenv("DB_PORT", "5432")
 
 if DB_HOST and DB_NAME and DB_USER and DB_PASSWORD:
@@ -83,6 +83,9 @@ if DB_HOST and DB_NAME and DB_USER and DB_PASSWORD:
         "PASSWORD": DB_PASSWORD,
         "HOST": DB_HOST,
         "PORT": DB_PORT,
+        "OPTIONS": {
+            "sslmode": "require",
+        }
     }
 
 # Internationalization
