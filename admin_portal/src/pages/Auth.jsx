@@ -178,29 +178,6 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#14213D] px-4 relative overflow-hidden">
-      <style>{`
-        @keyframes kineticStretch {
-          0% {
-            letter-spacing: -0.02em;
-            transform: scaleX(0.9);
-          }
-          50% {
-            letter-spacing: 0.28em;
-            transform: scaleX(1.35);
-            color: #FCA311;
-          }
-          100% {
-            letter-spacing: -0.02em;
-            transform: scaleX(0.9);
-          }
-        }
-        .kinetic-text {
-          display: inline-block;
-          animation: kineticStretch 4.5s ease-in-out infinite;
-          transform-origin: center;
-          transition: color 0.5s ease;
-        }
-      `}</style>
       {/* Dynamic decorative backdrop grids */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(252,163,17,0.1),transparent_70%)] pointer-events-none"></div>
 
@@ -214,9 +191,7 @@ const Auth = () => {
           <div className="inline-flex p-3 rounded-xl bg-accent/10 text-accent mb-3">
             <Layers size={28} />
           </div>
-          <h2 className="text-2xl font-black text-white tracking-tight font-sans">
-            <span className="kinetic-text">TheClassMate</span>
-          </h2>
+          <h2 className="text-2xl font-bold text-white tracking-tight font-sans">TheClassMate</h2>
           <p className="text-xs text-gray-400 mt-1">
             {mustReset
               ? 'Initialize Secure Password'
