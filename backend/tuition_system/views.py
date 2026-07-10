@@ -9,9 +9,11 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import redirect
+
 def index_view(request):
-    """Health check endpoint for root URL"""
-    return JsonResponse({"status": "ok", "message": "Tuition System API is running"})
+    """Redirect to the React Admin Portal Login page"""
+    return redirect("http://localhost:8080/login")
 
 
 from tuition_system.db_connection import (

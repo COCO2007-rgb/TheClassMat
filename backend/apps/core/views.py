@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db import transaction
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -17,7 +18,8 @@ from core.serializers import BatchSerializer, SettingsSerializer
 from services import get_user_student
 
 def index_view(request):
-    return JsonResponse({"status": "ok", "message": "Tuition System API is running"})
+    """Redirect to the React Admin Portal Login page"""
+    return redirect("http://localhost:8080/login")
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
