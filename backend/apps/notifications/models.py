@@ -23,7 +23,7 @@ class AuditLog(models.Model):
         return f"{self.user} - {self.action} ({self.timestamp})"
 
 class OtpLog(models.Model):
-    mobile = models.CharField(max_length=20, db_index=True)
+    mobile = models.CharField(max_length=255, db_index=True)
     otp = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
