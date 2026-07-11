@@ -40,6 +40,7 @@ const MainLayout = ({ children }) => {
   const [settings, setSettings] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [footerModalType, setFooterModalType] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -180,7 +181,7 @@ const MainLayout = ({ children }) => {
                 animate={{ opacity: 1 }}
                 className="font-bold text-sm uppercase tracking-wider text-accent flex items-center"
               >
-                <Layers size={18} className="mr-2" /> {settings?.name || 'THECLASSMATE'}
+                <Layers size={18} className="mr-2" /> THECLASSMATE
               </motion.span>
             )}
             {collapsed && !isMobile && (
@@ -243,13 +244,19 @@ const MainLayout = ({ children }) => {
             {isMobile && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-450 dark:hover:bg-gray-800 cursor-pointer flex items-center justify-center mr-1"
+                className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-455 dark:hover:bg-gray-800 cursor-pointer flex items-center justify-center mr-1"
               >
                 <Menu size={20} />
               </button>
             )}
-            <h2 className="text-sm font-extrabold text-accent flex items-center tracking-wider">
-              {settings?.name || 'THECLASSMATE'} <span className="mx-2 text-gray-400 dark:text-gray-600 font-normal">|</span> <span className="text-gray-800 dark:text-white font-bold">{location.pathname === '/' ? 'DASHBOARD' : location.pathname.substring(1).toUpperCase().replace('-', ' ')}</span>
+            <h2 className="text-sm font-extrabold text-accent flex items-center tracking-wider uppercase">
+              THECLASSMATE 
+              {location.pathname !== '/' && (
+                <>
+                  <span className="mx-2 text-gray-400 dark:text-gray-600 font-normal">|</span>
+                  <span className="text-gray-800 dark:text-white font-bold">{location.pathname.substring(1).toUpperCase().replace('-', ' ')}</span>
+                </>
+              )}
             </h2>
           </div>
 
@@ -365,12 +372,12 @@ const MainLayout = ({ children }) => {
             </div>
             
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              <a href="#about" className="hover:text-accent hover:underline transition-colors">About Us</a>
-              <a href="#contact" className="hover:text-accent hover:underline transition-colors">Contact Us</a>
-              <a href="#privacy" className="hover:text-accent hover:underline transition-colors">Privacy Policy</a>
-              <a href="#terms" className="hover:text-accent hover:underline transition-colors">Terms &amp; Conditions</a>
-              <a href="#help" className="hover:text-accent hover:underline transition-colors">Help Center</a>
-              <a href="#support" className="hover:text-accent hover:underline transition-colors">Support</a>
+              <button onClick={() => setFooterModalType('about')} className="hover:text-accent hover:underline transition-colors cursor-pointer">About Us</button>
+              <button onClick={() => setFooterModalType('contact')} className="hover:text-accent hover:underline transition-colors cursor-pointer">Contact Us</button>
+              <button onClick={() => setFooterModalType('privacy')} className="hover:text-accent hover:underline transition-colors cursor-pointer">Privacy Policy</button>
+              <button onClick={() => setFooterModalType('terms')} className="hover:text-accent hover:underline transition-colors cursor-pointer">Terms &amp; Conditions</button>
+              <button onClick={() => setFooterModalType('help')} className="hover:text-accent hover:underline transition-colors cursor-pointer">Help Center</button>
+              <button onClick={() => setFooterModalType('support')} className="hover:text-accent hover:underline transition-colors cursor-pointer">Support</button>
             </div>
           </div>
         </footer>
@@ -379,8 +386,98 @@ const MainLayout = ({ children }) => {
         <CommandPalette isOpen={isPaletteOpen} onClose={() => setIsPaletteOpen(false)} />
         
       </div>
+
+      {/* Footer Details Modal Overlay */}
+      <AnimatePresence>
+        {footerModalType && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setFooterModalType(null)}
+              className="absolute inset-0 bg-black cursor-pointer"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-[#14213D] border border-gray-200 dark:border-gray-800 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative z-10 text-gray-800 dark:text-gray-200"
+            >
+              <button
+                onClick={() => setFooterModalType(null)}
+                className="absolute top-4 right-4 text-gray-450 hover:text-gray-650 dark:hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+
+              <h3 className="text-sm font-extrabold uppercase tracking-wider text-accent border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">
+                {footerModalType === 'about' && 'About TheClassMate'}
+                {footerModalType === 'contact' && 'Contact Support & Sales'}
+                {footerModalType === 'privacy' && 'Privacy & Data Security Policy'}
+                {footerModalType === 'terms' && 'Terms of Service Agreement'}
+                {footerModalType === 'help' && 'Help & Documentation Center'}
+                {footerModalType === 'support' && 'Technical Support Portal'}
+              </h3>
+
+              <div className="text-xs leading-relaxed space-y-3 font-sans text-gray-600 dark:text-gray-300">
+                {footerModalType === 'about' && (
+                  <p>
+                    <strong>TheClassMate</strong> is a state-of-the-art educational management system designed to streamline coaching center operations, track student progress, manage attendance, assign homework, organize exams, and securely manage fee logs. Built for speed, premium aesthetics, and complete offline fallback capability.
+                  </p>
+                )}
+                {footerModalType === 'contact' && (
+                  <div className="space-y-2">
+                    <p>Need help? Feel free to contact our administrative desk:</p>
+                    <ul className="list-disc pl-4 space-y-1">
+                      <li><strong>Email:</strong> support@theclassmate.in</li>
+                      <li><strong>Phone:</strong> +91 98765 43210</li>
+                      <li><strong>Hours:</strong> Monday - Saturday, 9:00 AM - 6:00 PM IST</li>
+                    </ul>
+                  </div>
+                )}
+                {footerModalType === 'privacy' && (
+                  <p>
+                    Your data privacy is our absolute priority. We secure all sensitive database tables (including personal, attendance, and exam entries) using enterprise-grade JWT token verification and TLS encryption protocol. We do not sell or share student or coaching center directories with third-party networks.
+                  </p>
+                )}
+                {footerModalType === 'terms' && (
+                  <p>
+                    By logging into the administrative workspace or parent dashboard of TheClassMate, you agree to protect your credentials, comply with the Coaching Center's guidelines, and refrain from uploading harmful scripts or brute-forcing authorization keys.
+                  </p>
+                )}
+                {footerModalType === 'help' && (
+                  <div className="space-y-2">
+                    <p>Quick guides for center administrators:</p>
+                    <ul className="list-disc pl-4 space-y-1">
+                      <li><strong>Batch Creation:</strong> Click on Batches in the sidebar, click "Create New Batch", fill in the code, fees, and select subjects.</li>
+                      <li><strong>Self-Enrollment:</strong> Copy the Batch Code and share it with parents to let them register.</li>
+                      <li><strong>OTP Log Verification:</strong> Check the browser Console logs (F12) to see OTP codes during local testing.</li>
+                    </ul>
+                  </div>
+                )}
+                {footerModalType === 'support' && (
+                  <p>
+                    If you experience API exceptions (e.g., status 500 or network timeouts), please check that your local server is running or contact the system developer at <code>dev@apextuition.com</code> with a copy of your traceback log.
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setFooterModalType(null)}
+                  className="px-4 py-2 bg-accent hover:opacity-90 text-primary font-bold text-xs rounded-lg cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export default MainLayout;
+

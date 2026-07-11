@@ -71,3 +71,24 @@ select option {
   background-color: #14213D;
   color: #ffffff;
 }
+
+/* High contrast input placeholders for visibility */
+::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+.dark ::placeholder {
+  color: #9CA3AF !important;
+  opacity: 0.75 !important;
+}
+
+.dark input, .dark select, .dark textarea {
+  color: #FFFFFF !important;
+  background-color: rgba(20, 33, 61, 0.4) !important;
+  border-color: #374151 !important;
+}
+
+.dark input:focus, .dark select:focus, .dark textarea:focus {
+  border-color: #FCA311 !important;
+}
