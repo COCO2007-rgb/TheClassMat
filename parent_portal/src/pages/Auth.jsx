@@ -204,6 +204,30 @@ const Auth = () => {
       {/* Background Accent Gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(252,163,17,0.1),transparent_70%)] pointer-events-none"></div>
 
+      {/* 3D-like Morphing floating ball backdrop animation */}
+      <motion.div
+        animate={{
+          y: [0, -40, 20, -30, 0],
+          x: [0, 30, -20, 15, 0],
+          rotate: [0, 90, 180, 270, 360],
+          borderRadius: [
+            "42% 58% 70% 30% / 45% 45% 55% 55%",
+            "70% 30% 52% 48% / 60% 40% 60% 40%",
+            "30% 70% 70% 30% / 50% 60% 40% 50%",
+            "42% 58% 70% 30% / 45% 45% 55% 55%"
+          ]
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute -right-16 -top-16 md:right-[15%] md:top-[20%] w-72 h-72 md:w-96 md:h-96 bg-gradient-to-tr from-accent via-[#ff4d4d] to-[#3a86ff] opacity-40 blur-[8px] pointer-events-none z-0"
+        style={{
+          boxShadow: "inset 0 0 50px rgba(255,255,255,0.2), 0 0 80px rgba(252,163,17,0.3)"
+        }}
+      />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

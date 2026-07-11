@@ -250,7 +250,7 @@ const MainLayout = ({ children }) => {
               </button>
             )}
             <h2 className="text-sm font-extrabold text-accent flex items-center tracking-wider uppercase">
-              THECLASSMATE 
+              {settings?.name || 'APEX COACHING ACADEMY'} 
               {location.pathname !== '/' && (
                 <>
                   <span className="mx-2 text-gray-400 dark:text-gray-600 font-normal">|</span>
