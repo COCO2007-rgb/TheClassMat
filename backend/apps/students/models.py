@@ -36,10 +36,17 @@ class Student(BaseModel):
         class MockQuerySet:
             def __init__(self, batch):
                 self.batch = batch
+                self.list = [batch] if batch else []
             def all(self):
-                return [self.batch] if self.batch else []
+                return self.list
             def filter(self, *args, **kwargs):
-                return self.all()
+                return self
+            def count(self):
+                return len(self.list)
+            def __iter__(self):
+                return iter(self.list)
+            def __len__(self):
+                return len(self.list)
         return MockQuerySet(self.batch)
 
     @property
