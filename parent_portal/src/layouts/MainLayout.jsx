@@ -351,8 +351,8 @@ const MainLayout = ({ children }) => {
                 {isActive && (
                   <motion.div
                     layoutId="activeTabMobile"
-                    className="absolute inset-0 bg-[#FCA311]/15 border border-[#FCA311]/30 rounded-xl"
-                    transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+                    className="absolute inset-0 bg-[#FCA311]/20 rounded-2xl"
+                    transition={{ type: 'spring', damping: 22, stiffness: 220 }}
                   />
                 )}
                 <item.icon size={18} className={isActive ? 'text-[#FCA311] relative z-10' : 'text-gray-400 relative z-10'} />
@@ -368,7 +368,7 @@ const MainLayout = ({ children }) => {
             className="relative flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all cursor-pointer"
           >
             {moreMenuOpen && (
-              <div className="absolute inset-0 bg-[#FCA311]/15 border border-[#FCA311]/30 rounded-xl" />
+              <div className="absolute inset-0 bg-[#FCA311]/20 rounded-2xl" />
             )}
             <Menu size={18} className={moreMenuOpen ? 'text-[#FCA311] relative z-10' : 'text-gray-400 relative z-10'} />
             <span className={`text-[8px] mt-0.5 font-bold relative z-10 ${moreMenuOpen ? 'text-[#FCA311]' : 'text-gray-400'}`}>

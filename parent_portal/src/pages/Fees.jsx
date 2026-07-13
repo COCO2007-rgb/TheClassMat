@@ -26,12 +26,16 @@ const Fees = () => {
   const fetchData = async () => {
     try {
       if (child) {
-        const payRes = await api.get('/fees/payments/');
+        const [payRes, settRes] = await Promise.all([
+          api.get('/fees/payments/'),
+          api.get('/settings/')
+        ]);
         setPayments(payRes.data);
+        setSettings(settRes.data);
+      } else {
+        const settRes = await api.get('/settings/');
+        setSettings(settRes.data);
       }
-
-      const settRes = await api.get('/settings/');
-      setSettings(settRes.data);
     } catch (err) {
       console.error('Failed to load parent payments ledger:', err);
     } finally {

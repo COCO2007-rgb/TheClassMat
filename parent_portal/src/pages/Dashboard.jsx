@@ -18,10 +18,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const statsRes = await api.get('/dashboard/stats/');
+        const [statsRes, notifRes] = await Promise.all([
+          api.get('/dashboard/stats/'),
+          api.get('/notifications/')
+        ]);
         setStats(statsRes.data);
-
-        const notifRes = await api.get('/notifications/');
         setNotifications(notifRes.data);
       } catch (err) {
         console.error('Failed to load parent dashboard:', err);

@@ -38,24 +38,27 @@ const Attendance = () => {
         '2026-07-01', '2026-07-02', '2026-07-03', '2026-07-04', '2026-07-05'
       ];
       
-      const recordsList = [];
-      for (const d of dates) {
+      const promises = dates.map(async (d) => {
         try {
           const res = await api.get(`/attendance/?batch_id=${selectedBatch}&date=${d}`);
           if (res.data && res.data.records) {
             const childRec = res.data.records.find(r => r.student_id === child.id);
             if (childRec) {
-              recordsList.push({
+              return {
                 date: d,
                 status: childRec.status,
                 remarks: childRec.remarks || 'Normal class'
-              });
+              };
             }
           }
         } catch (e) {
           // ignore date logs
         }
-      }
+        return null;
+      });
+
+      const results = await Promise.all(promises);
+      const recordsList = results.filter(r => r !== null);
       setHistory(recordsList.reverse());
     } catch (err) {
       console.error('Failed to load attendance logs:', err);
