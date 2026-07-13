@@ -3,10 +3,11 @@ import api from '../services/api';
 import { CreditCard, Landmark, Receipt, ChevronRight, Printer, CheckCircle, Smartphone } from 'lucide-react';
 import QRCode from 'qrcode';
 import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext';
 
 const Fees = () => {
+  const { child } = useAuth();
   const [payments, setPayments] = useState([]);
-  const [child, setChild] = useState(null);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,11 +25,7 @@ const Fees = () => {
 
   const fetchData = async () => {
     try {
-      const studRes = await api.get('/students/');
-      const activeChild = studRes.data[0];
-      setChild(activeChild);
-
-      if (activeChild) {
+      if (child) {
         const payRes = await api.get('/fees/payments/');
         setPayments(payRes.data);
       }
@@ -43,8 +40,12 @@ const Fees = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (child) {
+      fetchData();
+    } else {
+      setLoading(true);
+    }
+  }, [child]);
 
   // Generate UPI QR Code when Pay Modal is opened
   useEffect(() => {

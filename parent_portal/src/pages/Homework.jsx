@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { BookOpen, Calendar, CheckCircle2, AlertCircle, UploadCloud, FileText } from 'lucide-react';
 import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext';
 
 const Homework = () => {
+  const { child } = useAuth();
   const [homeworks, setHomeworks] = useState([]);
-  const [child, setChild] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Submission Modal state
@@ -16,13 +17,8 @@ const Homework = () => {
 
   const fetchHomework = async () => {
     try {
-      // 1. Fetch child profile
-      const studRes = await api.get('/students/');
-      const activeChild = studRes.data[0];
-      setChild(activeChild);
-
-      if (activeChild) {
-        // 2. Fetch homework listings
+      if (child) {
+        // Fetch homework listings
         const hwRes = await api.get('/homework/');
         setHomeworks(hwRes.data);
       }
@@ -34,8 +30,12 @@ const Homework = () => {
   };
 
   useEffect(() => {
-    fetchHomework();
-  }, []);
+    if (child) {
+      fetchHomework();
+    } else {
+      setLoading(true);
+    }
+  }, [child]);
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();

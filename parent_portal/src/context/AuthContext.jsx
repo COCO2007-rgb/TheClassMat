@@ -7,6 +7,25 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('theclassmate_token'));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('theclassmate_user') || 'null'));
   const [loading, setLoading] = useState(true);
+  const [child, setChild] = useState(null);
+
+  useEffect(() => {
+    const loadChildData = async () => {
+      if (token) {
+        try {
+          const res = await api.get('/students/');
+          if (res.data && res.data.length > 0) {
+            setChild(res.data[0]);
+          }
+        } catch (err) {
+          console.error("Failed to preload child details:", err);
+        }
+      } else {
+        setChild(null);
+      }
+    };
+    loadChildData();
+  }, [token]);
 
   useEffect(() => {
     const handleSessionExpired = () => {
@@ -116,7 +135,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, loginSendOTP, loginVerifyOTP, requestOTP, verifyOTP, completeRegistration, logout, isAuthenticated: !!token, loading }}>
+    <AuthContext.Provider value={{ token, user, child, login, loginSendOTP, loginVerifyOTP, requestOTP, verifyOTP, completeRegistration, logout, isAuthenticated: !!token, loading }}>
       {children}
     </AuthContext.Provider>
   );

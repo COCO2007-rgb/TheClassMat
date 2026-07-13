@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Calendar, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Attendance = () => {
+  const { child } = useAuth();
   const [batches, setBatches] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState('');
   const [history, setHistory] = useState([]);
@@ -26,16 +28,10 @@ const Attendance = () => {
   }, []);
 
   const loadAttendanceHistory = async () => {
-    if (!selectedBatch) return;
+    if (!selectedBatch || !child) return;
     setLoading(true);
     try {
-      // Fetch child profile to identify ID
-      const userRes = await api.get('/auth/profile/');
-      // We will queries student list (returns only current parent's child profile in restructured backend!)
-      const studRes = await api.get('/students/');
-      const child = studRes.data[0];
-
-      if (!child) return;
+      // Profile details are preloaded globally in AuthContext!
 
       // Simulate queries attendance logs over dates
       const dates = [
@@ -69,8 +65,10 @@ const Attendance = () => {
   };
 
   useEffect(() => {
-    loadAttendanceHistory();
-  }, [selectedBatch]);
+    if (child) {
+      loadAttendanceHistory();
+    }
+  }, [selectedBatch, child]);
 
   return (
     <div className="space-y-6">

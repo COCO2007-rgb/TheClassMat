@@ -96,27 +96,6 @@ const Auth = () => {
       const res = await loginSendOTP(email, undefined);
       const targetEmail = res.email || email;
       
-      // Auto-fill and auto-submit OTP for direct one-click login
-      if (res.otp) {
-        const digits = res.otp.split('');
-        setOtpDigits(digits);
-        setSuccess('Auto-logging in...');
-        try {
-          const verifyRes = await loginVerifyOTP(email, res.otp, undefined);
-          if (verifyRes.is_new_user) {
-            setSuccess('OTP verified successfully! Let\'s setup your profile details.');
-            setStep(3);
-          } else {
-            setSuccess('Authentication successful. Logging you in...');
-            setTimeout(() => navigate('/'), 1000);
-          }
-        } catch (verifyErr) {
-          setError(verifyErr.message || 'Auto-login failed. Please enter the OTP manually.');
-          setStep(2);
-        }
-        return;
-      }
-
       // Log generated OTP to developer console for safety
       console.log(`[DEVELOPER SYSTEM] Generated login OTP code is: ${res.otp}`);
 

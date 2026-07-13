@@ -2,22 +2,18 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Award, Trophy, Calendar, Sparkles } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
+import { useAuth } from '../context/AuthContext';
 
 const Exams = () => {
+  const { child } = useAuth();
   const [exams, setExams] = useState([]);
-  const [child, setChild] = useState(null);
   const [selectedExam, setSelectedExam] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchExams = async () => {
     try {
-      // 1. Fetch child profile
-      const studRes = await api.get('/students/');
-      const activeChild = studRes.data[0];
-      setChild(activeChild);
-
-      if (activeChild) {
-        // 2. Fetch exams
+      if (child) {
+        // Fetch exams
         const exRes = await api.get('/exams/');
         setExams(exRes.data);
         if (exRes.data.length > 0) {
@@ -32,8 +28,13 @@ const Exams = () => {
   };
 
   useEffect(() => {
-    fetchExams();
-  }, []);
+    if (child) {
+      fetchExams();
+    } else {
+      // If child details are still preloading, keep loading indicator active
+      setLoading(true);
+    }
+  }, [child]);
 
   const getChildScore = (ex) => {
     if (!ex || !child) return null;
