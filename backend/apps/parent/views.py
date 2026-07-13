@@ -455,6 +455,7 @@ def parent_report_card_view(request):
     return generate_report_card_pdf(s_doc, attendance_rate, exam_results, remarks)
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def public_settings_view(request):
     center = CoachingCenter.objects.first()
     name = center.name if center else "Apex Coaching Academy"
