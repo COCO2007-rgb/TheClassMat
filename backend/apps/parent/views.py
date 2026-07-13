@@ -57,45 +57,50 @@ def public_register_student(request):
     if not batch:
         return Response({"error": "Invalid batch code"}, status=status.HTTP_400_BAD_REQUEST)
         
-    mob = data.get("mobile")
-    if mob and Student.objects.filter(mobile=mob, is_archived=False).exists():
-        return Response({"error": "Student with this mobile number already exists"}, status=status.HTTP_400_BAD_REQUEST)
+    student_contact = data.get("student_contact") or data.get("mobile")
+    parent_contact = data.get("parent_contact")
+    
+    if not student_contact and not parent_contact:
+        return Response({"error": "Student or Parent contact number is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    # Search for a pre-added student matching either contact number at this center
+    q_filter = Q(is_archived=False, coaching_center=batch.coaching_center)
+    if student_contact and parent_contact:
+        q_filter &= Q(student_contact=student_contact.strip()) | Q(parent_contact=parent_contact.strip())
+    elif student_contact:
+        q_filter &= Q(student_contact=student_contact.strip())
+    else:
+        q_filter &= Q(parent_contact=parent_contact.strip())
+        
+    student = Student.objects.filter(q_filter).first()
+    if not student:
+        return Response({"error": "No registered student found with this contact number. Please contact your academy administrator to be pre-registered."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    # Check if this student is already registered with a portal account
+    if User.objects.filter(student_id=str(student.id)).exists():
+        return Response({"error": "An online portal account has already been registered for this student."}, status=status.HTTP_400_BAD_REQUEST)
         
     email = data.get("email")
     if email and User.objects.filter(email__iexact=email.strip()).exists():
-        return Response({"error": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "An account with this email address already exists"}, status=status.HTTP_400_BAD_REQUEST)
         
-    # Create Student
-    cc = batch.coaching_center
-    prefix = "STU"
-    if cc and cc.roll_number_prefix:
-        prefix = cc.roll_number_prefix.strip()
-        
-    total_students_count = Student.all_objects.filter(coaching_center=cc).count() if cc else Student.all_objects.count()
-    student_id_code = f"{prefix}-{1000 + total_students_count + 1}"
-    
     with transaction.atomic():
-        student = Student.objects.create(
-            student_id=student_id_code,
-            first_name=data.get("name"),
-            surname=data.get("surname", ""),
-            student_contact=data.get("student_contact") or mob,
-            parent_contact=data.get("parent_contact") or data.get("parent_mobile", ""),
-            dob=data.get("dob", ""),
-            gender=data.get("gender", ""),
-            joining_date=data.get("joining_date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            batch=batch,
-            coaching_center=batch.coaching_center
-        )
+        # Update name and surname if provided during registration
+        if data.get("name"):
+            student.first_name = data.get("name").strip()
+        if data.get("surname"):
+            student.surname = data.get("surname").strip()
+        student.batch = batch
+        student.save()
         
-        parent_email = email if email else f"{student_id_code.lower()}@apextuition.com"
-        password = mob if mob else "parent123"
+        parent_email = email.strip() if email else f"{student.student_id.lower()}@apextuition.com"
+        password = data.get("password") or student_contact or "parent123"
         
         user = User.objects.create_user(
             email=parent_email,
             password=password,
-            first_name=student.name,
-            last_name="(Parent/Student)",
+            first_name=data.get("parent_name") or student.first_name,
+            last_name=data.get("surname") or student.surname or "(Parent)",
             role="parent",
             student_id=str(student.id),
             coaching_center=batch.coaching_center
