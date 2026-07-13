@@ -16,6 +16,8 @@ const Students = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
+  const [fatherName, setFatherName] = useState('');
+  const [motherName, setMotherName] = useState('');
   const [studentContact, setStudentContact] = useState('');
   const [parentContact, setParentContact] = useState('');
   const [address, setAddress] = useState('');
@@ -60,6 +62,8 @@ const Students = () => {
       await api.post('/students/', {
         name,
         surname,
+        father_name: fatherName,
+        mother_name: motherName,
         mobile: studentContact, // map for backward compatibility
         student_contact: studentContact,
         parent_contact: parentContact,
@@ -72,6 +76,8 @@ const Students = () => {
       
       setName('');
       setSurname('');
+      setFatherName('');
+      setMotherName('');
       setStudentContact('');
       setParentContact('');
       setAddress('');
@@ -284,6 +290,26 @@ const Students = () => {
                 type="text"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
+                className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Father's Name</label>
+              <input
+                type="text"
+                value={fatherName}
+                onChange={(e) => setFatherName(e.target.value)}
+                className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Mother's Name</label>
+              <input
+                type="text"
+                value={motherName}
+                onChange={(e) => setMotherName(e.target.value)}
                 className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
               />
             </div>

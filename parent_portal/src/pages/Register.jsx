@@ -15,6 +15,7 @@ const Register = () => {
   // Form states
   const [name, setName] = useState('');
   const [fatherName, setFatherName] = useState('');
+  const [motherName, setMotherName] = useState('');
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
@@ -64,6 +65,7 @@ const Register = () => {
         batch_code: batchCodeParam,
         name,
         father_name: fatherName,
+        mother_name: motherName,
         mobile,
         whatsapp,
         dob,
@@ -174,18 +176,6 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Father's Name</label>
-              <input
-                type="text"
-                value={fatherName}
-                onChange={(e) => setFatherName(e.target.value)}
-                className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
               <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Mobile Contact *</label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -200,16 +190,38 @@ const Register = () => {
                 />
               </div>
             </div>
+          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">WhatsApp Mobile</label>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Father's Name</label>
               <input
                 type="text"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
+                value={fatherName}
+                onChange={(e) => setFatherName(e.target.value)}
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
+
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Mother's Name</label>
+              <input
+                type="text"
+                value={motherName}
+                onChange={(e) => setMotherName(e.target.value)}
+                className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">WhatsApp Mobile</label>
+            <input
+              type="text"
+              value={whatsapp}
+              onChange={(e) => setWhatsapp(e.target.value)}
+              className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

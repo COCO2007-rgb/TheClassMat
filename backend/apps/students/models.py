@@ -7,6 +7,8 @@ class Student(BaseModel):
     coaching_center = models.ForeignKey(CoachingCenter, on_delete=models.CASCADE, related_name="students", db_column='tuition_id')
     first_name = models.CharField(max_length=255, db_column='first_name', default="")
     surname = models.CharField(max_length=255, blank=True, null=True, db_column='surname')
+    father_name = models.CharField(max_length=255, blank=True, null=True, db_column='father_name')
+    mother_name = models.CharField(max_length=255, blank=True, null=True, db_column='mother_name')
     gender = models.CharField(max_length=20, default="Male", db_column='gender')
     dob = models.CharField(max_length=50, blank=True, null=True, db_column='dob')
     student_contact = models.CharField(max_length=50, blank=True, null=True, db_column='student_contact')

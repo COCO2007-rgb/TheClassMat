@@ -85,11 +85,15 @@ def public_register_student(request):
         return Response({"error": "An account with this email address already exists"}, status=status.HTTP_400_BAD_REQUEST)
         
     with transaction.atomic():
-        # Update name and surname if provided during registration
+        # Update name, surname, and parent details if provided during registration
         if data.get("name"):
             student.first_name = data.get("name").strip()
         if data.get("surname"):
             student.surname = data.get("surname").strip()
+        if data.get("father_name"):
+            student.father_name = data.get("father_name").strip()
+        if data.get("mother_name"):
+            student.mother_name = data.get("mother_name").strip()
         student.batch = batch
         student.save()
         

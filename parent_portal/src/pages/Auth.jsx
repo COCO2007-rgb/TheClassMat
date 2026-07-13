@@ -40,7 +40,8 @@ const Auth = () => {
   // Step 3 (Registration) Fields
   const [studentName, setStudentName] = useState('');
   const [surname, setSurname] = useState('');
-  const [parentName, setParentName] = useState('');
+  const [fatherName, setFatherName] = useState('');
+  const [motherName, setMotherName] = useState('');
   const [studentContact, setStudentContact] = useState('');
   const [parentContact, setParentContact] = useState('');
   const [batchCode, setBatchCode] = useState('');
@@ -192,8 +193,8 @@ const Auth = () => {
     setSuccess('');
     setLoading(true);
 
-    if (!studentName || !surname || !parentName || !studentContact || !parentContact || !batchCode || !password) {
-      setError('Student Name, Surname, Parent Name, Student Contact, Parent Contact, Batch Code, and Password are all required.');
+    if (!studentName || !surname || !studentContact || !parentContact || !batchCode || !password) {
+      setError('Student Name, Surname, Student Contact, Parent Contact, Batch Code, and Password are all required.');
       setLoading(false);
       return;
     }
@@ -203,7 +204,8 @@ const Auth = () => {
         batch_code: batchCode,
         name: studentName,
         surname: surname,
-        parent_name: parentName,
+        father_name: fatherName,
+        mother_name: motherName,
         student_contact: studentContact,
         parent_contact: parentContact,
         email: email,
@@ -400,23 +402,21 @@ const Auth = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent First Name *</label>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Father's Name</label>
                   <input
                     type="text"
-                    required
-                    value={parentName}
-                    onChange={(e) => setParentName(e.target.value)}
+                    value={fatherName}
+                    onChange={(e) => setFatherName(e.target.value)}
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Batch Invite Code *</label>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Mother's Name</label>
                   <input
                     type="text"
-                    required
-                    value={batchCode}
-                    onChange={(e) => setBatchCode(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none uppercase font-mono"
+                    value={motherName}
+                    onChange={(e) => setMotherName(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
               </div>
@@ -444,15 +444,27 @@ const Auth = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent Portal Email *</label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Batch Invite Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={batchCode}
+                    onChange={(e) => setBatchCode(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none uppercase font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent Portal Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
               </div>
 
               <div>
