@@ -191,7 +191,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Fees Trend line chart */}
-        <div className="lg:col-span-2 p-6 rounded-xl bg-white dark:bg-primary border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between chart-card-anim">
+        <div className="lg:col-span-2 p-6 card-premium flex flex-col justify-between chart-card-anim">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-gray-900 dark:text-white">Tuition Financial Trends</h3>
@@ -205,7 +205,7 @@ const Dashboard = () => {
         </div>
 
         {/* Timetable slots */}
-        <div className="p-6 rounded-xl bg-white dark:bg-primary border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between chart-card-anim">
+        <div className="p-6 card-premium flex flex-col justify-between chart-card-anim">
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-white">Today's Class Schedule</h3>
@@ -244,7 +244,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Activity Logs */}
-        <div className="lg:col-span-2 p-6 rounded-xl bg-white dark:bg-primary border border-gray-100 dark:border-gray-800 shadow-sm activity-card-anim">
+        <div className="lg:col-span-2 p-6 card-premium activity-card-anim">
           <div className="flex items-center space-x-2 mb-4">
             <History size={16} className="text-accent" />
             <h3 className="text-sm font-bold text-gray-900 dark:text-white">Workspace Activity Log</h3>
@@ -270,7 +270,7 @@ const Dashboard = () => {
         </div>
 
         {/* Student Info Doughnut/Pie Chart */}
-        <div className="p-6 rounded-xl bg-white dark:bg-primary border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between activity-card-anim">
+        <div className="p-6 card-premium flex flex-col justify-between activity-card-anim">
           <div>
             <h3 className="text-sm font-bold text-gray-900 dark:text-white">Student Program Distribution</h3>
             <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Enrolments by subject domain</p>

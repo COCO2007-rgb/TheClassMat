@@ -453,3 +453,9 @@ def parent_report_card_view(request):
     } for r in remarks_queryset]
     
     return generate_report_card_pdf(s_doc, attendance_rate, exam_results, remarks)
+
+@api_view(["GET"])
+def public_settings_view(request):
+    center = CoachingCenter.objects.first()
+    name = center.name if center else "Apex Coaching Academy"
+    return Response({"name": name, "powered_by": "TheClassMate"})

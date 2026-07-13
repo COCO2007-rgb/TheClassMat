@@ -236,7 +236,8 @@ const MainLayout = ({ children }) => {
       </motion.aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0" style={{ paddingLeft: isMobile ? 0 : (collapsed ? 72 : 260) }}>
+      <div className="flex-1 flex flex-col min-w-0 relative bg-slate-50/60 dark:bg-[#0B1226] transition-colors duration-300" style={{ paddingLeft: isMobile ? 0 : (collapsed ? 72 : 260) }}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(252,163,17,0.02),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(252,163,17,0.025),transparent_50%)] pointer-events-none"></div>
         
         {/* Header bar */}
         <header className="h-16 bg-white dark:bg-primary border-b border-gray-200 dark:border-gray-800 sticky top-0 flex items-center justify-between px-6 z-20 shadow-sm transition-colors">

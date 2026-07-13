@@ -106,12 +106,12 @@ const Dashboard = () => {
             <div className="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
               <div 
                 className="bg-emerald-500 h-full rounded-full transition-all duration-700" 
-                style={{ width: `${Math.min(100, (stats.fees_collected / 15000) * 100)}%` }}
+                style={{ width: `${Math.min(100, (stats.fees_collected / (child?.batch_fees || Math.max(1, stats.fees_collected))) * 100)}%` }}
               ></div>
             </div>
             <div className="flex justify-between text-[8px] font-bold text-gray-400">
               <span>PAID IN FULL</span>
-              <span>ESTIMATED CYCLE: ₹15,000</span>
+              <span>ESTIMATED CYCLE: ₹{child?.batch_fees || 0}</span>
             </div>
           </div>
         </div>

@@ -96,3 +96,35 @@ select option {
 .dark input:focus, .dark select:focus, .dark textarea:focus {
   border-color: #FCA311 !important;
 }
+
+/* Premium UI elements styling extensions */
+.card-premium {
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.02);
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dark .card-premium {
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background-color: #14213D;
+  box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.3);
+}
+.card-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.04);
+  border-color: rgba(252, 163, 17, 0.2);
+}
+.dark .card-premium:hover {
+  border-color: rgba(252, 163, 17, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Glassmorphism sidebar overlay overrides */
+aside {
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.02);
+  border-right: 1px solid rgba(252, 163, 17, 0.1) !important;
+}
+.dark aside {
+  box-shadow: 8px 0 40px rgba(0, 0, 0, 0.3);
+}

@@ -15,10 +15,9 @@ from students.views import students_view, student_detail_view, promote_student_v
 from attendance.views import attendance_view
 from fees.views import payments_view
 from reports.views import csv_export_students
-from parent.views import (
     public_batch_detail, public_register_student, parent_otp_register_view,
     parent_otp_verify_view, parent_remarks_view, parent_attendance_list_view,
-    parent_report_card_view
+    parent_report_card_view, public_settings_view
 )
 from developer.views import (
     backup_view, audit_logs_view, developer_stats_view, developer_db_clear_view,
@@ -48,6 +47,7 @@ urlpatterns = [
     path("api/public/register-student/", public_register_student, name="api-public-register-student"),
     path("api/public/parent/register/", parent_otp_register_view, name="api-public-parent-register"),
     path("api/public/parent/verify/", parent_otp_verify_view, name="api-public-parent-verify"),
+    path("api/public/settings/", public_settings_view, name="api-public-settings"),
 
     # Dashboard Metrics
     path("api/dashboard/stats/", dashboard_stats_view, name="api-dashboard-stats"),

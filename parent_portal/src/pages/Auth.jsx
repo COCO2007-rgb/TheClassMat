@@ -23,10 +23,28 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(0);
+  const [publicSettings, setPublicSettings] = useState(null);
+
+  React.useEffect(() => {
+    const fetchPublicSettings = async () => {
+      try {
+        const res = await api.get('/public/settings/');
+        setPublicSettings(res.data);
+      } catch (err) {
+        console.error('Failed to load public settings:', err);
+      }
+    };
+    fetchPublicSettings();
+  }, []);
 
   // Step 3 (Registration) Fields
   const [studentName, setStudentName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [parentName, setParentName] = useState('');
+  const [studentContact, setStudentContact] = useState('');
+  const [parentContact, setParentContact] = useState('');
   const [batchCode, setBatchCode] = useState('');
+  const [password, setPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
@@ -174,8 +192,8 @@ const Auth = () => {
     setSuccess('');
     setLoading(true);
 
-    if (!studentName || !batchCode) {
-      setError('Student Name and Batch Code are required.');
+    if (!studentName || !surname || !parentName || !studentContact || !parentContact || !batchCode || !password) {
+      setError('Student Name, Surname, Parent Name, Student Contact, Parent Contact, Batch Code, and Password are all required.');
       setLoading(false);
       return;
     }
@@ -184,8 +202,12 @@ const Auth = () => {
       const response = await api.post('/public/register-student/', {
         batch_code: batchCode,
         name: studentName,
-        mobile: '',
-        email
+        surname: surname,
+        parent_name: parentName,
+        student_contact: studentContact,
+        parent_contact: parentContact,
+        email: email,
+        password: password
       });
 
       const { token, user } = response.data;
@@ -214,8 +236,11 @@ const Auth = () => {
           <div className="inline-flex p-3 rounded-xl bg-accent/10 text-accent mb-3">
             <ShieldCheck size={28} />
           </div>
-          <h2 className="text-xl font-bold tracking-tight">Parent & Student Portal</h2>
-          <p className="text-xs text-gray-400 mt-1">
+          <h2 className="text-xl font-bold tracking-tight">{publicSettings?.name || 'Parent & Student Portal'}</h2>
+          <p className="text-[10px] text-accent font-extrabold uppercase tracking-widest mt-1">
+            Powered by TheClassMate
+          </p>
+          <p className="text-xs text-gray-400 mt-2">
             {step === 1 ? 'Log in to access student directories and ledgers' : 'Configure your profile details to link to your tuition batch'}
           </p>
         </div>
@@ -307,6 +332,14 @@ const Auth = () => {
                 </button>
               </div>
 
+              {timer > 0 && (
+                <div className="flex items-center justify-center space-x-2 py-2.5 bg-accent/5 rounded-xl border border-accent/10 animate-pulse">
+                  <span className="text-[11px] text-accent font-bold">
+                    ⏰ Verification code is active. Expires in {timer} seconds.
+                  </span>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={loading || timer === 0 || otpDigits.some(d => !d)}
@@ -332,55 +365,103 @@ const Auth = () => {
                 <span>Verification complete. Let's finish building your profile.</span>
               </div>
 
-              <div>
-                <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Student Full Name *</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-                    <User size={14} />
-                  </span>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Student First Name *</label>
                   <input
                     type="text"
                     required
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
-                    placeholder="E.g., Jane Doe"
-                    className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                    placeholder="E.g., Jane"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Student Surname *</label>
+                  <input
+                    type="text"
+                    required
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                    placeholder="E.g., Doe"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Tuition Batch Code *</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-                    <Bookmark size={14} />
-                  </span>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent First Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={parentName}
+                    onChange={(e) => setParentName(e.target.value)}
+                    placeholder="E.g., Robert"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Batch Invite Code *</label>
                   <input
                     type="text"
                     required
                     value={batchCode}
                     onChange={(e) => setBatchCode(e.target.value)}
                     placeholder="E.g., B-MATH10"
-                    className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none uppercase font-mono"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none uppercase font-mono"
                   />
                 </div>
-                <p className="text-[9px] text-gray-500 mt-1">Get this code from your coaching center administrator.</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Student Contact *</label>
+                  <input
+                    type="text"
+                    required
+                    value={studentContact}
+                    onChange={(e) => setStudentContact(e.target.value)}
+                    placeholder="Student Mobile"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent Contact *</label>
+                  <input
+                    type="text"
+                    required
+                    value={parentContact}
+                    onChange={(e) => setParentContact(e.target.value)}
+                    placeholder="Parent Mobile"
+                    className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Parent Email (Optional)</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-                    <Mail size={14} />
-                  </span>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="parent.name@example.com"
-                    className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
-                  />
-                </div>
+                <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Parent Portal Email *</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="parent.name@example.com"
+                  className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[9px] uppercase font-bold text-gray-400 mb-1">Account Password *</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create Portal Password"
+                  className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                />
               </div>
 
               <button
