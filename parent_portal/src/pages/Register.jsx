@@ -168,7 +168,6 @@ const Register = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="E.g., John Doe"
                   className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
@@ -180,7 +179,6 @@ const Register = () => {
                 type="text"
                 value={fatherName}
                 onChange={(e) => setFatherName(e.target.value)}
-                placeholder="Robert Doe"
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
@@ -198,7 +196,6 @@ const Register = () => {
                   required
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  placeholder="9876543210"
                   className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
@@ -210,7 +207,6 @@ const Register = () => {
                 type="text"
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="WhatsApp Number"
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
@@ -246,7 +242,6 @@ const Register = () => {
                 type="text"
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
-                placeholder="E.g., O+"
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
@@ -259,7 +254,6 @@ const Register = () => {
                 type="text"
                 value={school}
                 onChange={(e) => setSchool(e.target.value)}
-                placeholder="St. Xavier's High School"
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
@@ -274,7 +268,6 @@ const Register = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="parent.name@example.com"
                   className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
@@ -287,7 +280,6 @@ const Register = () => {
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="Full physical address details..."
               className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
             />
           </div>
@@ -302,7 +294,6 @@ const Register = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Create Portal Password"
               className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
             />
           </div>

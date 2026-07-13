@@ -275,7 +275,6 @@ const Students = () => {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="John"
                 className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
               />
             </div>
@@ -285,7 +284,6 @@ const Students = () => {
                 type="text"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
-                placeholder="Doe"
                 className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
               />
             </div>
@@ -298,7 +296,6 @@ const Students = () => {
                 required
                 value={studentContact}
                 onChange={(e) => setStudentContact(e.target.value)}
-                placeholder="E.g., 9876543210"
                 className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
               />
             </div>
@@ -308,7 +305,6 @@ const Students = () => {
                 type="text"
                 value={parentContact}
                 onChange={(e) => setParentContact(e.target.value)}
-                placeholder="E.g., 9876543211"
                 className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
               />
             </div>
@@ -341,7 +337,6 @@ const Students = () => {
             <textarea
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="Enter student residential address"
               rows="2"
               className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
             ></textarea>

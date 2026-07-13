@@ -383,7 +383,6 @@ const Auth = () => {
                     required
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
-                    placeholder="E.g., Jane"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
@@ -394,7 +393,6 @@ const Auth = () => {
                     required
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
-                    placeholder="E.g., Doe"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
@@ -408,7 +406,6 @@ const Auth = () => {
                     required
                     value={parentName}
                     onChange={(e) => setParentName(e.target.value)}
-                    placeholder="E.g., Robert"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
@@ -419,7 +416,6 @@ const Auth = () => {
                     required
                     value={batchCode}
                     onChange={(e) => setBatchCode(e.target.value)}
-                    placeholder="E.g., B-MATH10"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none uppercase font-mono"
                   />
                 </div>
@@ -433,7 +429,6 @@ const Auth = () => {
                     required
                     value={studentContact}
                     onChange={(e) => setStudentContact(e.target.value)}
-                    placeholder="Student Mobile"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
@@ -444,7 +439,6 @@ const Auth = () => {
                     required
                     value={parentContact}
                     onChange={(e) => setParentContact(e.target.value)}
-                    placeholder="Parent Mobile"
                     className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                   />
                 </div>
@@ -457,7 +451,6 @@ const Auth = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="parent.name@example.com"
                   className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
@@ -469,7 +462,6 @@ const Auth = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create Portal Password"
                   className="w-full px-2.5 py-1.5 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
