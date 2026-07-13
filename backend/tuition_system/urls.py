@@ -15,6 +15,7 @@ from students.views import students_view, student_detail_view, promote_student_v
 from attendance.views import attendance_view
 from fees.views import payments_view
 from reports.views import csv_export_students
+from parent.views import (
     public_batch_detail, public_register_student, parent_otp_register_view,
     parent_otp_verify_view, parent_remarks_view, parent_attendance_list_view,
     parent_report_card_view, public_settings_view
