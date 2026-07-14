@@ -14,6 +14,7 @@ const Register = () => {
 
   // Form states
   const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [fatherName, setFatherName] = useState('');
   const [motherName, setMotherName] = useState('');
   const [mobile, setMobile] = useState('');
@@ -64,6 +65,7 @@ const Register = () => {
       const response = await api.post('/public/register-student/', {
         batch_code: batchCodeParam,
         name,
+        surname,
         father_name: fatherName,
         mother_name: motherName,
         mobile,
@@ -187,6 +189,18 @@ const Register = () => {
             </div>
 
             <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Surname</label>
+              <input
+                type="text"
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+                className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
               <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Mobile Contact *</label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -200,6 +214,16 @@ const Register = () => {
                   className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">WhatsApp Mobile</label>
+              <input
+                type="text"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+                className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+              />
             </div>
           </div>
 
@@ -223,16 +247,6 @@ const Register = () => {
                 className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">WhatsApp Mobile</label>
-            <input
-              type="text"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              className="w-full px-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
-            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

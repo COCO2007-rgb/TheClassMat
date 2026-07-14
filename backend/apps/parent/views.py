@@ -95,6 +95,14 @@ def public_register_student(request):
             student.father_name = data.get("father_name").strip()
         if data.get("mother_name"):
             student.mother_name = data.get("mother_name").strip()
+        if data.get("school") or data.get("school_name"):
+            student.school_name = (data.get("school") or data.get("school_name")).strip()
+        if data.get("dob"):
+            student.dob = data.get("dob").strip()
+        if data.get("gender"):
+            student.gender = data.get("gender").strip()
+        if data.get("address"):
+            student.address = data.get("address").strip()
         student.batch = batch
         student.save()
         

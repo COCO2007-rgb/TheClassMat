@@ -18,6 +18,7 @@ const Students = () => {
   const [surname, setSurname] = useState('');
   const [fatherName, setFatherName] = useState('');
   const [motherName, setMotherName] = useState('');
+  const [schoolName, setSchoolName] = useState('');
   const [studentContact, setStudentContact] = useState('');
   const [parentContact, setParentContact] = useState('');
   const [address, setAddress] = useState('');
@@ -64,6 +65,7 @@ const Students = () => {
         surname,
         father_name: fatherName,
         mother_name: motherName,
+        school_name: schoolName,
         mobile: studentContact, // map for backward compatibility
         student_contact: studentContact,
         parent_contact: parentContact,
@@ -78,6 +80,7 @@ const Students = () => {
       setSurname('');
       setFatherName('');
       setMotherName('');
+      setSchoolName('');
       setStudentContact('');
       setParentContact('');
       setAddress('');
@@ -358,14 +361,25 @@ const Students = () => {
               </select>
             </div>
           </div>
-          <div>
-            <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Residential Address</label>
-            <textarea
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              rows="2"
-              className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
-            ></textarea>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">School Name</label>
+              <input
+                type="text"
+                value={schoolName}
+                onChange={(e) => setSchoolName(e.target.value)}
+                className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Residential Address</label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs outline-none focus:border-accent text-gray-900 dark:text-white font-sans"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>

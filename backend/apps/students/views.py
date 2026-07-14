@@ -31,15 +31,16 @@ def students_view(request):
         if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
-        mobile = request.data.get("mobile")
+        mobile = request.data.get("student_contact") or request.data.get("mobile")
         
-        # Check uniqueness of mobile in the current center
-        queryset = Student.objects.filter(mobile=mobile, is_archived=False)
-        if request.user.role != "developer":
-            queryset = queryset.filter(coaching_center=request.user.coaching_center)
-            
-        if mobile and queryset.exists():
-            return Response({"error": "Student with this mobile number already exists in your coaching center"}, status=status.HTTP_400_BAD_REQUEST)
+        # Check uniqueness of mobile/contact in the current center
+        if mobile:
+            queryset = Student.objects.filter(student_contact=mobile.strip(), is_archived=False)
+            if request.user.role != "developer":
+                queryset = queryset.filter(coaching_center=request.user.coaching_center)
+                
+            if queryset.exists():
+                return Response({"error": "Student with this mobile/contact number already exists in your coaching center"}, status=status.HTTP_400_BAD_REQUEST)
             
         data = request.data.copy()
         
@@ -58,8 +59,15 @@ def students_view(request):
         next_num = max_num + 1
         data["student_id"] = f"{prefix}{next_num:04d}"
         
+        batch_ids = request.data.get("batch_ids", [])
         if "coaching_center" not in data or not data["coaching_center"]:
-            data["coaching_center"] = request.user.coaching_center.id if request.user.coaching_center else None
+            # Fallback to the assigned batch's coaching center if user's is None
+            if batch_ids:
+                batch = Batch.objects.filter(id=batch_ids[0]).first()
+                if batch:
+                    data["coaching_center"] = batch.coaching_center.id
+            if "coaching_center" not in data or not data["coaching_center"]:
+                data["coaching_center"] = request.user.coaching_center.id if request.user.coaching_center else None
             
         serializer = StudentSerializer(data=data)
         if serializer.is_valid():

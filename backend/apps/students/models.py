@@ -9,6 +9,7 @@ class Student(BaseModel):
     surname = models.CharField(max_length=255, blank=True, null=True, db_column='surname')
     father_name = models.CharField(max_length=255, blank=True, null=True, db_column='father_name')
     mother_name = models.CharField(max_length=255, blank=True, null=True, db_column='mother_name')
+    school_name = models.CharField(max_length=255, blank=True, null=True, db_column='school_name')
     gender = models.CharField(max_length=20, default="Male", db_column='gender')
     dob = models.CharField(max_length=50, blank=True, null=True, db_column='dob')
     student_contact = models.CharField(max_length=50, blank=True, null=True, db_column='student_contact')
