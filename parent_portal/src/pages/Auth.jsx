@@ -158,9 +158,32 @@ const Auth = () => {
     setError('');
     setSuccess('');
     
+    if (!email || !password) {
+      setError('Email Address and Password are required to login.');
+      return;
+    }
+    
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      setSuccess('Authentication successful. Logging you in...');
+      setTimeout(() => navigate('/'), 1000);
+    } catch (err) {
+      setError(err.message || 'Login failed. Please verify credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyEmailSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    
     const otpCode = otpDigits.join('');
     if (!email || otpCode.length < 6) {
-      setError('Email Address and the complete 6-digit Verification OTP are required to login.');
+      setError('Email Address and the complete 6-digit Verification OTP are required.');
       return;
     }
 
@@ -174,11 +197,11 @@ const Auth = () => {
     try {
       const res = await loginVerifyOTP(email, otpCode, undefined);
       if (res.is_new_user) {
-        setSuccess('OTP verified successfully! Let\'s setup your profile details.');
+        setSuccess('Email verified successfully! Let\'s setup your profile details.');
         setStep(3);
       } else {
-        setSuccess('Authentication successful. Logging you in...');
-        setTimeout(() => navigate('/'), 1000);
+        setSuccess('Email verified! An account already exists for this email. Redirecting to login...');
+        setTimeout(() => setStep(1), 2000);
       }
     } catch (err) {
       setError(err.message || 'OTP verification failed.');
@@ -249,7 +272,7 @@ const Auth = () => {
             Powered by TheClassMate
           </p>
           <p className="text-xs text-gray-400 mt-2">
-            {step === 1 ? 'Log in to access student directories and ledgers' : 'Configure your profile details to link to your tuition batch'}
+          {step === 1 ? 'Log in to access student directories and ledgers' : step === 2 ? 'Verify your email to request profile linking' : 'Configure your profile details to link to your tuition batch'}
           </p>
         </div>
 
@@ -283,6 +306,75 @@ const Auth = () => {
               onSubmit={handleLoginSubmit}
               className="space-y-4"
             >
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Email Address</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                    <Mail size={14} />
+                  </span>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="example@gmail.com"
+                    className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Account Password</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                    <Lock size={14} />
+                  </span>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-9 pr-3 py-2 bg-primary/40 border border-gray-800 text-white rounded-lg text-xs focus:border-accent outline-none"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full mt-2 py-2.5 bg-accent hover:opacity-90 text-primary font-bold text-xs rounded-lg transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50 font-sans"
+              >
+                <span>{loading ? 'Authenticating...' : 'Sign In'}</span>
+                {!loading && <ArrowRight size={14} />}
+              </button>
+
+              <div className="text-center mt-4 border-t border-gray-800/40 pt-4">
+                <button
+                  type="button"
+                  onClick={() => { setStep(2); setError(''); setSuccess(''); }}
+                  className="text-xs text-accent hover:underline font-bold"
+                >
+                  Don't have an account? Sign Up
+                </button>
+              </div>
+            </motion.form>
+          )}
+
+          {step === 2 && (
+            <motion.form
+              key="verify-email-form"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onSubmit={handleVerifyEmailSubmit}
+              className="space-y-4"
+            >
+              <div className="p-3 bg-accent/10 border border-accent/20 rounded-lg text-[11px] text-accent flex items-center space-x-2">
+                <Mail size={16} />
+                <span>Verify your email address before profile registration.</span>
+              </div>
+
               <div>
                 <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Email Address</label>
                 <div className="relative">
@@ -353,17 +445,17 @@ const Auth = () => {
                 disabled={loading || timer === 0 || otpDigits.some(d => !d)}
                 className="w-full mt-2 py-2.5 bg-accent hover:opacity-90 text-primary font-bold text-xs rounded-lg transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50 font-sans"
               >
-                <span>{loading ? 'Authenticating...' : 'Sign In'}</span>
+                <span>{loading ? 'Verifying...' : 'Verify Email'}</span>
                 {!loading && <ArrowRight size={14} />}
               </button>
 
               <div className="text-center mt-4 border-t border-gray-800/40 pt-4">
                 <button
                   type="button"
-                  onClick={() => { setStep(3); setError(''); setSuccess(''); }}
+                  onClick={() => { setStep(1); setError(''); setSuccess(''); }}
                   className="text-xs text-accent hover:underline font-bold"
                 >
-                  Don't have an account? Sign Up
+                  Back to Sign In
                 </button>
               </div>
             </motion.form>

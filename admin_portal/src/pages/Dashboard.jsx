@@ -149,7 +149,7 @@ const Dashboard = () => {
 
   // Parse attendance percentage
   const attendanceVal = parseInt(stats.today_attendance) || 100;
-  const radius = 20;
+  const radius = 24;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (attendanceVal / 100) * circumference;
 
@@ -209,17 +209,17 @@ const Dashboard = () => {
           trend="+1.2%"
           onClick={() => navigate('/attendance')}
         >
-          <div className="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
-            <svg className="w-10 h-10 transform -rotate-90">
-              <circle cx="20" cy="20" r={radius} stroke="#e5e7eb" strokeWidth="3" fill="transparent" className="dark:stroke-gray-800" />
-              <circle cx="20" cy="20" r={radius} stroke="#FCA311" strokeWidth="3" fill="transparent"
+          <div className="relative w-14 h-14 flex items-center justify-center flex-shrink-0">
+            <svg className="w-14 h-14 transform -rotate-90">
+              <circle cx="28" cy="28" r={radius} stroke="#e5e7eb" strokeWidth="3" fill="transparent" className="dark:stroke-gray-800" />
+              <circle cx="28" cy="28" r={radius} stroke="#FCA311" strokeWidth="3" fill="transparent"
                 strokeDasharray={circumference}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 className="transition-all duration-700 ease-out"
               />
             </svg>
-            <span className="absolute text-[8px] font-bold text-gray-900 dark:text-white">{stats.today_attendance}</span>
+            <span className="absolute text-[9px] font-bold text-gray-900 dark:text-white">{stats.today_attendance}</span>
           </div>
         </KPICard>
         <KPICard
@@ -230,17 +230,7 @@ const Dashboard = () => {
           description={`Target progress: ${feePercent}%`}
           trend="+15%"
           onClick={() => navigate('/fees')}
-        >
-          <div className="flex flex-col items-end space-y-1 w-14 flex-shrink-0">
-            <div className="w-full bg-gray-100 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
-              <div 
-                className="bg-emerald-500 h-full rounded-full transition-all duration-700" 
-                style={{ width: `${feePercent}%` }}
-              ></div>
-            </div>
-            <span className="text-[7px] font-bold text-gray-400 dark:text-gray-500">₹50K GOAL</span>
-          </div>
-        </KPICard>
+        />
       </div>
 
       {/* Row 2: Charts and Upcoming schedule */}

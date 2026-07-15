@@ -19,15 +19,8 @@ const Batches = () => {
   const [error, setError] = useState('');
   const [showSubjectMenu, setShowSubjectMenu] = useState(false);
   const [customSubject, setCustomSubject] = useState('');
-
-  const handleAddCustomSubject = () => {
-    if (customSubject.trim() && !selectedSubjects.includes(customSubject.trim())) {
-      setSelectedSubjects([...selectedSubjects, customSubject.trim()]);
-      setCustomSubject('');
-    }
-  };
-
-  const subjectsList = [
+  
+  const [subjects, setSubjects] = useState([
     'Mathematics',
     'Science',
     'Physics',
@@ -37,7 +30,20 @@ const Batches = () => {
     'History',
     'Geography',
     'Computer Science'
-  ];
+  ]);
+
+  const handleAddCustomSubject = () => {
+    const trimmed = customSubject.trim();
+    if (trimmed) {
+      if (!subjects.includes(trimmed)) {
+        setSubjects([...subjects, trimmed]);
+      }
+      if (!selectedSubjects.includes(trimmed)) {
+        setSelectedSubjects([...selectedSubjects, trimmed]);
+      }
+      setCustomSubject('');
+    }
+  };
 
   const fetchBatches = async () => {
     try {
@@ -242,7 +248,7 @@ const Batches = () => {
             {showSubjectMenu && (
               <div className="absolute left-0 right-0 mt-1 p-3 bg-white dark:bg-[#14213D] border border-gray-200 dark:border-gray-750 rounded-lg shadow-xl z-50 flex flex-col space-y-3 max-h-60 overflow-y-auto">
                 <div className="grid grid-cols-2 gap-2">
-                  {subjectsList.map((subj) => (
+                  {subjects.map((subj) => (
                     <label key={subj} className="flex items-center space-x-2 text-xs font-semibold text-gray-750 dark:text-gray-300 cursor-pointer">
                       <input
                         type="checkbox"

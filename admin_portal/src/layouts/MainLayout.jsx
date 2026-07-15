@@ -41,6 +41,7 @@ const MainLayout = ({ children }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [footerModalType, setFooterModalType] = useState(null);
+  const [hasUnread, setHasUnread] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,6 +67,9 @@ const MainLayout = ({ children }) => {
       try {
         const response = await api.get('/notifications/');
         setNotifications(response.data);
+        if (response.data && response.data.length > 0) {
+          setHasUnread(true);
+        }
       } catch (err) {
         console.error('Failed to fetch notifications:', err);
       }
@@ -270,11 +274,11 @@ const MainLayout = ({ children }) => {
             <div className="relative">
               <button
                 id="bell-button"
-                onClick={() => { setShowNotifications(!showNotifications); setShowProfile(false); }}
+                onClick={() => { setShowNotifications(!showNotifications); setShowProfile(false); setHasUnread(false); }}
                 className="p-2 rounded-lg bg-gray-50 dark:bg-gray-850 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 cursor-pointer relative animate-none"
               >
                 <Bell size={18} />
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+                {hasUnread && <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent animate-pulse"></span>}
               </button>
 
               {/* Notifications dropdown menu */}

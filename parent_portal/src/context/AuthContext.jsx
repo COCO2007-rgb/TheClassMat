@@ -29,8 +29,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const handleSessionExpired = () => {
+      const activeToken = localStorage.getItem('theclassmate_token');
       logout();
-      alert('Your parent portal session has expired. Please sign in again.');
+      if (activeToken) {
+        alert('Your parent portal session has expired. Please sign in again.');
+      }
     };
 
     window.addEventListener('auth_session_expired', handleSessionExpired);
