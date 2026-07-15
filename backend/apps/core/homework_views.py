@@ -69,7 +69,7 @@ def homework_view(request):
         s_doc = get_user_student(request.user)
         
         # Student / Parent submitting homework flow
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             if not s_doc:
                 return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
                 

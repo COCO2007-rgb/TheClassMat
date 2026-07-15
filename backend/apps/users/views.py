@@ -449,6 +449,13 @@ def forgot_password_reset_view(request):
 @permission_classes([IsAuthenticated])
 def list_teachers_view(request):
     cc = request.user.coaching_center
+    if not cc and request.user.role == "developer":
+        cc_id = request.data.get("coaching_center") or request.query_params.get("coaching_center")
+        if cc_id:
+            cc = CoachingCenter.objects.filter(id=cc_id).first()
+        if not cc:
+            cc = CoachingCenter.objects.first()
+
     if request.method == "GET":
         queryset = Teacher.objects.all()
         if request.user.role != "developer":
@@ -466,7 +473,7 @@ def list_teachers_view(request):
         } for t in queryset])
         
     elif request.method == "POST":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
         name = request.data.get("name")
         subject = request.data.get("subject")
@@ -500,7 +507,7 @@ def list_teachers_view(request):
             }, status=status.HTTP_201_CREATED)
             
     elif request.method == "PUT":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
         t_id = request.data.get("id")
         if not t_id:
@@ -533,7 +540,7 @@ def list_teachers_view(request):
         })
         
     elif request.method == "DELETE":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
         t_id = request.data.get("id") or request.query_params.get("id")
         if not t_id:

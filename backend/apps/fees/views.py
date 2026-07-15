@@ -27,7 +27,7 @@ def payments_view(request):
         
     elif request.method == "POST":
         s_doc = get_user_student(request.user)
-        if request.user.role != "teacher" and not s_doc:
+        if request.user.role not in ["teacher", "developer"] and not s_doc:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         data = request.data.copy()

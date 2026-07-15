@@ -126,7 +126,7 @@ def batch_detail_view(request, pk):
         return Response(serializer.data)
         
     elif request.method == "PUT":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=403)
             
         serializer = BatchSerializer(batch, data=request.data, partial=True)
@@ -137,7 +137,7 @@ def batch_detail_view(request, pk):
         return Response(serializer.errors, status=400)
         
     elif request.method == "DELETE":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=403)
             
         with transaction.atomic():
@@ -159,7 +159,7 @@ def batch_detail_view(request, pk):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def clone_batch_view(request, pk):
-    if request.user.role != "teacher":
+    if request.user.role not in ["teacher", "developer"]:
         return Response({"error": "Access denied"}, status=403)
         
     queryset = Batch.objects.all()

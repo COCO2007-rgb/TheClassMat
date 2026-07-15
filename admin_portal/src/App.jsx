@@ -18,6 +18,7 @@ import DeveloperPortal from './pages/DeveloperPortal';
 import RecycleBin from './pages/RecycleBin';
 import AuditLogs from './pages/AuditLogs';
 import Teachers from './pages/Teachers';
+import AnimationPreview from './pages/AnimationPreview';
 
 
 // Secure Route Helper Wrapper
@@ -51,6 +52,9 @@ function App() {
 
       {/* Developer Portal (Private & Hidden) */}
       <Route path="/developer/portal" element={<DeveloperPortal />} />
+
+      {/* Standalone Animation Preview */}
+      <Route path="/animation" element={<AnimationPreview />} />
 
       {/* Protected Admin Portal Scope */}
       <Route
