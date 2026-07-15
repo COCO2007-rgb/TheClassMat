@@ -35,11 +35,20 @@ def exams_view(request):
             return Response(serializer.data)
 
     elif request.method == "POST":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         data = request.data.copy()
-        if "coaching_center" not in data or not data["coaching_center"]:
+        
+        batch_id = data.get("batch")
+        if batch_id:
+            batch = Batch.objects.filter(id=batch_id).first()
+            if not batch:
+                return Response({"error": "Batch not found"}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.role != "developer" and batch.coaching_center != request.user.coaching_center:
+                return Response({"error": "Access denied. Batch belongs to another coaching center."}, status=status.HTTP_403_FORBIDDEN)
+            data["coaching_center"] = batch.coaching_center.id
+        else:
             data["coaching_center"] = request.user.coaching_center.id if request.user.coaching_center else None
             
         serializer = ExamSerializer(data=data)
@@ -51,16 +60,20 @@ def exams_view(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == "PUT":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         ex_id = request.data.get("id")
         if not ex_id:
             return Response({"error": "Exam ID required"}, status=status.HTTP_400_BAD_REQUEST)
             
-        exam = Exam.objects.filter(id=ex_id).first()
+        queryset = Exam.objects.all()
+        if request.user.role != "developer":
+            queryset = queryset.filter(coaching_center=request.user.coaching_center)
+            
+        exam = queryset.filter(id=ex_id).first()
         if not exam:
-            return Response({"error": "Exam not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Exam not found or access denied"}, status=status.HTTP_404_NOT_FOUND)
             
         serializer = ExamSerializer(exam, data=request.data, partial=True)
         if serializer.is_valid():
@@ -87,16 +100,20 @@ def exams_view(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == "DELETE":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         ex_id = request.query_params.get("id") or request.data.get("id")
         if not ex_id:
             return Response({"error": "Exam ID required"}, status=status.HTTP_400_BAD_REQUEST)
             
-        exam = Exam.objects.filter(id=ex_id).first()
+        queryset = Exam.objects.all()
+        if request.user.role != "developer":
+            queryset = queryset.filter(coaching_center=request.user.coaching_center)
+            
+        exam = queryset.filter(id=ex_id).first()
         if not exam:
-            return Response({"error": "Exam not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Exam not found or access denied"}, status=status.HTTP_404_NOT_FOUND)
             
         with transaction.atomic():
             exam.delete()

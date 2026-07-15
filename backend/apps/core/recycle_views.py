@@ -38,11 +38,15 @@ def recycle_restore_view(request):
         if type_ == "Student":
             student = Student.all_objects.filter(id=item_id).first()
             if student:
+                if request.user.role != "developer" and student.coaching_center != request.user.coaching_center:
+                    return Response({"error": "Access denied. Student belongs to another coaching center."}, status=403)
                 student.is_archived = False
                 student.save()
         elif type_ == "Batch":
             batch = Batch.all_objects.filter(id=item_id).first()
             if batch:
+                if request.user.role != "developer" and batch.coaching_center != request.user.coaching_center:
+                    return Response({"error": "Access denied. Batch belongs to another coaching center."}, status=403)
                 batch.is_archived = False
                 batch.save()
                 
@@ -66,11 +70,17 @@ def recycle_purge_view(request):
         
     with transaction.atomic():
         if type_ == "Student":
-            # Hard delete
-            Student.all_objects.filter(id=item_id).delete()
+            student = Student.all_objects.filter(id=item_id).first()
+            if student:
+                if request.user.role != "developer" and student.coaching_center != request.user.coaching_center:
+                    return Response({"error": "Access denied. Student belongs to another coaching center."}, status=403)
+                student.hard_delete()
         elif type_ == "Batch":
-            # Hard delete
-            Batch.all_objects.filter(id=item_id).delete()
+            batch = Batch.all_objects.filter(id=item_id).first()
+            if batch:
+                if request.user.role != "developer" and batch.coaching_center != request.user.coaching_center:
+                    return Response({"error": "Access denied. Batch belongs to another coaching center."}, status=403)
+                batch.hard_delete()
             
         # Delete from RecycleBin
         RecycleBin.objects.filter(item_id=item_id, type=type_).delete()

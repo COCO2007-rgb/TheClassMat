@@ -19,18 +19,20 @@ def notifications_view(request):
     if request.method == "GET":
         s_doc = get_user_student(request.user)
         if s_doc:
-            # Parent/Student: filter by global=True OR their batches
+            # Parent/Student: filter by global=True inside their center OR their batches
             queryset = Notification.objects.filter(
-                Q(is_global=True) | Q(batch__in=s_doc.batches.all())
+                Q(is_global=True, coaching_center=s_doc.coaching_center) | Q(batch__in=s_doc.batches.all())
             ).order_by("-timestamp")
         else:
             queryset = Notification.objects.all().order_by("-timestamp")
+            if request.user.role != "developer":
+                queryset = queryset.filter(coaching_center=request.user.coaching_center)
             
         serializer = NotificationSerializer(queryset, many=True)
         return Response(serializer.data)
         
     elif request.method == "POST":
-        if request.user.role != "teacher":
+        if request.user.role not in ["teacher", "developer"]:
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         data = request.data.copy()
@@ -40,6 +42,18 @@ def notifications_view(request):
             data["is_global"] = data["global"]
             
         data["timestamp"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Validate batch matching and populate coaching center
+        batch_id = data.get("batch")
+        if batch_id:
+            batch = Batch.objects.filter(id=batch_id).first()
+            if not batch:
+                return Response({"error": "Batch not found"}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.role != "developer" and batch.coaching_center != request.user.coaching_center:
+                return Response({"error": "Access denied to batch"}, status=status.HTTP_403_FORBIDDEN)
+            data["coaching_center"] = batch.coaching_center.id
+        else:
+            data["coaching_center"] = request.user.coaching_center.id if request.user.coaching_center else None
         
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():

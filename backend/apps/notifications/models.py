@@ -8,6 +8,7 @@ class Notification(BaseModel):
     desc = models.TextField(blank=True, null=True)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE, null=True, blank=True, related_name="notifications")
     is_global = models.BooleanField(default=False)
+    coaching_center = models.ForeignKey("users.CoachingCenter", on_delete=models.CASCADE, null=True, blank=True, related_name="notifications")
     timestamp = models.CharField(max_length=50, blank=True, null=True)  # To preserve original sorting/formatting
 
     def __str__(self):

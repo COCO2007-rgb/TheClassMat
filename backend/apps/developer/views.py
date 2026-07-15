@@ -259,9 +259,16 @@ def backup_view(request):
         
     if request.method == "GET":
         # Simple dumps for SQL tables
+        if request.user.role != "developer":
+            batches = Batch.objects.filter(coaching_center=request.user.coaching_center)
+            students = Student.objects.filter(coaching_center=request.user.coaching_center)
+        else:
+            batches = Batch.objects.all()
+            students = Student.objects.all()
+            
         dump = {
-            "batches": [{"id": str(b.id), "name": b.name, "subject": b.subject, "schedule": b.schedule, "fees": b.fees, "code": b.code} for b in Batch.objects.all()],
-            "students": [{"id": str(s.id), "student_id": s.student_id, "name": s.name, "mobile": s.mobile, "email": s.email or ""} for s in Student.objects.all()]
+            "batches": [{"id": str(b.id), "name": b.name, "subject": b.subject, "schedule": b.schedule, "fees": b.fees, "code": b.code} for b in batches],
+            "students": [{"id": str(s.id), "student_id": s.student_id, "name": s.name, "mobile": s.mobile, "email": s.email or ""} for s in students]
         }
         response = HttpResponse(json.dumps(dump, indent=2), content_type="application/json")
         response["Content-Disposition"] = "attachment; filename=tuition_backup.json"
@@ -276,7 +283,12 @@ def audit_logs_view(request):
     if request.user.role not in ["teacher", "developer"]:
         return Response({"error": "Access denied"}, status=403)
         
-    logs = AuditLog.objects.all().order_by("-timestamp")
+    if request.user.role != "developer":
+        center_users = User.objects.filter(coaching_center=request.user.coaching_center).values_list("email", flat=True)
+        logs = AuditLog.objects.filter(user__in=center_users).order_by("-timestamp")
+    else:
+        logs = AuditLog.objects.all().order_by("-timestamp")
+        
     return Response([{
         "timestamp": l.timestamp,
         "user": l.user,
@@ -287,7 +299,7 @@ def audit_logs_view(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def developer_stats_view(request):
-    if request.user.role not in ["teacher", "developer"]:
+    if request.user.role != "developer":
         return Response({"error": "Access denied"}, status=403)
         
     return Response({
@@ -314,7 +326,7 @@ def developer_stats_view(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def developer_db_clear_view(request):
-    if request.user.role not in ["teacher", "developer"]:
+    if request.user.role != "developer":
         return Response({"error": "Access denied"}, status=403)
         
     with transaction.atomic():
@@ -337,7 +349,7 @@ def developer_db_clear_view(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def developer_db_seed_view(request):
-    if request.user.role not in ["teacher", "developer"]:
+    if request.user.role != "developer":
         return Response({"error": "Access denied"}, status=403)
         
     try:

@@ -41,7 +41,16 @@ def homework_view(request):
             return Response({"error": "Access denied"}, status=status.HTTP_403_FORBIDDEN)
             
         data = request.data.copy()
-        if "coaching_center" not in data or not data["coaching_center"]:
+        
+        batch_id = data.get("batch")
+        if batch_id:
+            batch = Batch.objects.filter(id=batch_id).first()
+            if not batch:
+                return Response({"error": "Batch not found"}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.role != "developer" and batch.coaching_center != request.user.coaching_center:
+                return Response({"error": "Access denied. Batch belongs to another coaching center."}, status=status.HTTP_403_FORBIDDEN)
+            data["coaching_center"] = batch.coaching_center.id
+        else:
             data["coaching_center"] = request.user.coaching_center.id if request.user.coaching_center else None
             
         serializer = HomeworkSerializer(data=data)
@@ -51,7 +60,7 @@ def homework_view(request):
                 log_activity_db(request.user.email, "Homework Added", f"Assigned new homework assignment: {hw.title}")
                 return Response(HomeworkSerializer(hw).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+ 
     elif request.method == "PUT":
         hw_id = request.data.get("id")
         if not hw_id:
@@ -89,10 +98,13 @@ def homework_view(request):
                 
                 log_activity_db(request.user.email, "Homework Submitted", f"Submitted homework worksheet for {hw_id}")
                 return Response({"message": "Homework submitted successfully"})
-
+ 
         # Teacher grading / updating homework flow
         else:
-            homework = Homework.objects.filter(id=hw_id).first()
+            queryset = Homework.objects.all()
+            if request.user.role != "developer":
+                queryset = queryset.filter(coaching_center=request.user.coaching_center)
+            homework = queryset.filter(id=hw_id).first()
             if not homework:
                 return Response({"error": "Homework not found"}, status=status.HTTP_404_NOT_FOUND)
                 

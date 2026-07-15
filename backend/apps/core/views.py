@@ -51,8 +51,8 @@ def settings_view(request):
         return Response(serializer.data)
         
     elif request.method == "POST":
-        if request.user.role != "developer":
-            return Response({"error": "Access denied. Only developers can modify platform settings."}, status=403)
+        if request.user.role not in ["teacher", "developer"]:
+            return Response({"error": "Access denied. Only teachers and developers can modify settings."}, status=403)
             
         s = Settings.objects.filter(coaching_center=center).first()
         serializer = SettingsSerializer(s, data=request.data, partial=True)
