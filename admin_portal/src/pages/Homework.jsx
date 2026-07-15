@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { BookOpen, Plus, Calendar, CheckSquare, Save, ChevronRight, FileText } from 'lucide-react';
+import { BookOpen, Plus, Calendar, CheckSquare, Save, ChevronRight, FileText, Eye } from 'lucide-react';
 import Modal from '../components/Modal';
 
 const Homework = () => {
@@ -21,6 +21,7 @@ const Homework = () => {
   const [gradingMarks, setGradingMarks] = useState({});
   const [gradingRemarks, setGradingRemarks] = useState({});
   const [savingGrade, setSavingGrade] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -275,16 +276,42 @@ const Homework = () => {
                   <div key={sub.student_id} className="p-3 bg-white dark:bg-primary border border-gray-200 dark:border-gray-850 rounded-lg space-y-3">
                     <div className="flex items-center justify-between text-xs font-semibold">
                       <span className="text-gray-900 dark:text-white">{sub.student_name}</span>
-                      <a
-                        href={sub.attachment_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-accent hover:underline inline-flex items-center space-x-1"
-                      >
-                        <FileText size={12} />
-                        <span>Download PDF</span>
-                      </a>
+                      <div className="flex items-center space-x-3">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewUrl(previewUrl === sub.attachment_url ? null : sub.attachment_url)}
+                          className="text-accent hover:underline inline-flex items-center space-x-1 cursor-pointer"
+                        >
+                          <Eye size={12} />
+                          <span>{previewUrl === sub.attachment_url ? 'Hide Preview' : 'Preview'}</span>
+                        </button>
+                        <a
+                          href={sub.attachment_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-accent hover:underline inline-flex items-center space-x-1"
+                        >
+                          <FileText size={12} />
+                          <span>Open Link</span>
+                        </a>
+                      </div>
                     </div>
+
+                    {previewUrl === sub.attachment_url && (
+                      <div className="mt-2 border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900 p-2 flex justify-center">
+                        {sub.attachment_url.match(/\.(jpeg|jpg|gif|png)/i) ? (
+                          <img src={sub.attachment_url} alt="Submission" className="max-h-60 max-w-full object-contain rounded" />
+                        ) : sub.attachment_url.toLowerCase().endsWith('.pdf') ? (
+                          <iframe src={sub.attachment_url} title="PDF Preview" className="w-full h-80 border-0 rounded" />
+                        ) : (
+                          <div className="w-full h-64 border border-dashed border-gray-300 dark:border-gray-800 rounded flex flex-col items-center justify-center text-gray-500">
+                            <FileText size={32} className="mb-2 text-gray-400" />
+                            <span className="text-[11px]">Preview not supported for this file type.</span>
+                            <a href={sub.attachment_url} target="_blank" rel="noreferrer" className="text-accent hover:underline text-xs mt-1 font-bold">Open document in a new tab</a>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     
                     {/* Scores & Comments row */}
                     <div className="grid grid-cols-2 gap-4">
