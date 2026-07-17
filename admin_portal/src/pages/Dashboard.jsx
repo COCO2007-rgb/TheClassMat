@@ -35,7 +35,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const [settings, setSettings] = useState(null);
   const [stats, setStats] = useState({
     total_students: 0,
@@ -48,6 +48,10 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (role === 'developer') {
+      navigate('/developer/portal', { replace: true });
+      return;
+    }
     const fetchDashboardData = async () => {
       try {
         const statsRes = await api.get('/dashboard/stats/');

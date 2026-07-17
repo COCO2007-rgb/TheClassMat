@@ -59,7 +59,11 @@ const Auth = () => {
         if (res.must_change_password) {
           setMustReset(true);
         } else {
-          navigate('/');
+          if (res.user?.role === 'developer') {
+            navigate('/developer/portal');
+          } else {
+            navigate('/');
+          }
         }
       } else {
         await register(firstName, lastName, email, password);
